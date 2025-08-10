@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Resume Builder{% endblock %}
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">Resume Builder</h1>
+    <p class="text-gray-600 mb-8">Fill out the form below to generate a `rendercv.com` YAML file.</p>
+
+    <form method="POST" class="bg-white p-8 rounded-lg shadow-md">
+        <div class="space-y-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" name="name" placeholder="Full Name" required class="w-full p-2 border rounded-md">
+                    <input type="email" name="email" placeholder="Email" required class="w-full p-2 border rounded-md">
+                    <input type="tel" name="phone" placeholder="Phone Number" class="w-full p-2 border rounded-md">
+                    <input type="url" name="linkedin" placeholder="LinkedIn Profile URL" class="w-full p-2 border rounded-md">
+                    <input type="url" name="github" placeholder="GitHub Profile URL" class="w-full p-2 border rounded-md">
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Education</h2>
+                <textarea name="education" rows="5" placeholder="List each education entry, separated by a blank line. Include institution, degree, dates, location, and highlights.&#10;&#10;e.g.,- institution: Stanford University&#10;  area: Computer Science&#10;  degree: PhD&#10;  start_date: 2023-09&#10;  end_date: present&#10;  highlights:&#10;    - Working on autonomous vehicles" required class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Experience</h2>
+                <textarea name="experience" rows="5" placeholder="List each experience entry, separated by a blank line. Include company, position, dates, location, and highlights.&#10;&#10;e.g.,- company: Company C&#10;  position: Summer Intern&#10;  start_date: 2024-06&#10;  end_date: 2024-09&#10;  highlights:&#10;    - Optimized the production line by 15% by implementing a new scheduling algorithm" class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Projects</h2>
+                <textarea name="projects" rows="5" placeholder="List each project entry, separated by a blank line. Include project name, dates, summary, and highlights.&#10;&#10;e.g.,- name: Example Project&#10;  start_date: 2024-05&#10;  end_date: present&#10;  highlights:&#10;    - Launched an iOS app with 10k+ users" class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Skills</h2>
+                <textarea name="skills" rows="3" placeholder="Enter your skills using the label and details format.&#10;&#10;e.g.,- label: Programming Languages&#10;  details: Python, R, SQL, C++&#10;- label: Data Visualization&#10;  details: Tableau, Power BI, Matplotlib" required class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Interests</h2>
+                <input type="text" name="interests" placeholder="e.g., Data Science, Machine Learning, Hiking, Reading" class="w-full p-2 border rounded-md">
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Languages</h2>
+                <input type="text" name="languages" placeholder="e.g., English (Native), Spanish (Intermediate)" class="w-full p-2 border rounded-md">
+            </div>
+
+            <button type="submit" class="w-full bg-blue-500 text-white font-bold py-3 rounded-md hover:bg-blue-600 transition duration-300">Generate Resume YAML</button>
+        </div>
+    </form>
+
+    {% if yaml_code %}
+    <div class="mt-10">
+        <h2 class="text-xl font-semibold mb-4">Your Resume YAML Code</h2>
+        <div class="relative bg-gray-100 p-6 rounded-lg font-mono text-sm overflow-auto max-h-96" id="yaml-output">
+            <pre>{{ yaml_code }}</pre>
+        </div>
+        <div class="flex justify-between items-center mt-4">
+            <button id="copy-button" class="bg-gray-700 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800 transition duration-300">
+                Copy Code
+            </button>
+            <a href="https://rendercv.com" target="_blank" class="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">
+                Go to RenderCV to use this code
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            // Use innerText to get the content without preserving leading/trailing spaces from pre-formatted text
+            const yamlOutput = document.getElementById('yaml-output').querySelector('pre').innerText;
+            navigator.clipboard.writeText(yamlOutput)
+                .then(() => {
+                    const button = document.getElementById('copy-button');
+                    const originalText = button.innerText;
+                    button.innerText = 'Copied!';
+                    setTimeout(() => {
+                        button.innerText = originalText;
+                    }, 2000); // Revert button text after 2 seconds
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Resume Analyzer{% endblock %}
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">Resume Analyzer</h1>
+    <p class="text-gray-600 mb-8">Upload your resume (PDF or DOCX) for a detailed analysis and feedback.</p>
+
+    <form method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-lg shadow-md mb-8">
+        <div class="flex items-center space-x-4">
+            <input type="file" name="resume_file" accept=".pdf, .docx" required class="flex-grow p-2 border rounded-md">
+            <button type="submit" class="bg-purple-500 text-white font-bold py-2 px-6 rounded-md hover:bg-purple-600 transition duration-300">Analyze</button>
+        </div>
+    </form>
+
+    {% if results %}
+    <div class="mt-8 p-8 bg-gray-50 rounded-lg shadow-inner">
+        <h2 class="text-xl font-semibold mb-4">Analysis Results</h2>
+        <div class="prose max-w-none">
+            {{ results | safe }}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
