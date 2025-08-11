@@ -3,3 +3,4 @@ google-generativeai
 python-dotenv
 pdfplumber
 python-docx
+gunicorn
